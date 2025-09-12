@@ -66,7 +66,6 @@ async def tel_send_message(chat_id, text):
             "inline_keyboard": [
                 [
                     {"text": "Открыть Муз Чат", "web_app": {"url": "https://clearres2.github.io/bababab/"}},
-                    {"text": "Диалог с ИИ", "callback_data": "deepSeek"}
                 ]
             ]
         }
