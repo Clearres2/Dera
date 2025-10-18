@@ -3,7 +3,6 @@ import httpx
 from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import JSONResponse
 from openai import AsyncOpenAI
-import aiosqlite
 
 TOKEN = os.getenv('TOKEN')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
@@ -41,16 +40,6 @@ def parse_message(message):
     chat_id = message["message"]["chat"]["id"]
     txt = message["message"]["text"]
     return chat_id, txt
- 
-DB_PATH = "users.db"
-async def initDB():
-     async with aiosqlite.connect(DB_PATH) as db:
-        await db.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id INTEGER PRIMARY KEY,
-            )
-        """)
-        await db.commit()
 
 @app.post('/setwebhook')
 async def setwebhook():
@@ -65,15 +54,9 @@ async def setwebhook():
 
 @app.on_event("startup")
 async def startup_event():
-    await set_webhook(),
-    await initDB()
+    await set_webhook()
 
 
-async def get_total_users() -> int:
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute("SELECT COUNT(*) FROM users") as cursor:
-            row = await cursor.fetchone()
-            return row[0] if row else 0
 async def tel_send_message(chat_id, text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
@@ -110,11 +93,6 @@ async def tel_send_message_not_markup(chat_id, text):
     return response
 
 user_states = {}
-
-async def add_user(user_id: int):
-    async with aiosqlite.connect(DB_PATH) as db:
-        await db.execute("INSERT OR IGNORE INTO users (user_id) VALUES (?)", (user_id,))
-        await db.commit()
 
 async def process_user_request(chat_id, txt):
     await tel_send_message_not_markup(chat_id, '🏈 Идет обработка...')
@@ -157,9 +135,9 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         )
 
     elif txt.lower() == "/admin":
-        total = await get_total_users()
-        await tel_send_message(chat_id, f"🎵 Статистика!\n\n👥 Всего пользователей: {total}")
-      
+        await tel_send_message(chat_id, 
+            "🎵 Статистика!"
+        )
 
 
 
