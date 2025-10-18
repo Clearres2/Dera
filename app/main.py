@@ -133,8 +133,6 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         chat_id = callback["message"]["chat"]["id"]
         callback_data = callback["data"]
 
-        await add_user(chat_id)
-
         if callback_data == "deepSeek":
             await tel_send_message_not_markup(chat_id, "Вы выбрали диалог с ИИ. Как я могу помочь вам?")
             user_states[chat_id] = 'awaiting_response'
