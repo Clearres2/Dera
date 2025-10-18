@@ -134,6 +134,11 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
             "🤖 Используйте возможности искусственного интеллекта для творческих запросов и новых идей. 🚀"
         )
 
+    elif txt.lower() == "/admin":
+        await tel_send_message(chat_id, 
+            "🎵 Статистика!"
+        )
+
     return JSONResponse(content={"status": "ok"}, status_code=200)
 
 @app.get("/")
