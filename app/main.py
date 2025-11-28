@@ -78,6 +78,24 @@ async def tel_send_message(chat_id, text):
 
     return response
 
+
+async def tel_send_message_not_button(chat_id, text):
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": text,
+    }
+    async with httpx.AsyncClient() as client:
+        response = await client.post(url, json=payload)
+
+    if response.status_code != 200:
+        print("Ошибка отправки сообщения:", response.text)
+
+    return response
+
+
+
+
 async def tel_send_message_not_markup(chat_id, text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
@@ -135,7 +153,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         )
         
     elif txt.lower() == "/admin":
-        await tel_send_message(chat_id, 
+        await tel_send_message_not_button(chat_id, 
             "🎵 Добро пожаловать в статистику"
         )
 
