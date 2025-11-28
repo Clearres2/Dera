@@ -4,14 +4,14 @@ from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import JSONResponse
 from openai import AsyncOpenAI
 import sqlite3
-from pathlib import Path
+import os
 
 TOKEN = os.getenv('TOKEN')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
-DB_PATH = Path("UsersForState.db")
+DB_PATH = "/UsersForState.db"
 
 def init_db():
-    if not DB_PATH.exists():
+    if not os.path.exists(DB_PATH):
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
