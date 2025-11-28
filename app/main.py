@@ -8,7 +8,7 @@ import os
 
 TOKEN = os.getenv('TOKEN')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
-DB_PATH = "/tmp/bot_stats.db"
+DB_PATH = "/bot_stats.db"
 
 def init_db():
     if not os.path.exists(DB_PATH):
