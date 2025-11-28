@@ -54,7 +54,7 @@ async def setwebhook():
 
 @app.on_event("startup")
 async def startup_event():
-    await set_webhook()
+    await setwebhook()
 
 
 async def tel_send_message(chat_id, text):
