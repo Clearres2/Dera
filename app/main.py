@@ -10,7 +10,7 @@ TOKEN = os.getenv('TOKEN')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
 DB_PATH = "/tmp/bot_stats.db"
 
-def init_db():
+async def init_db():
     if not os.path.exists(DB_PATH):
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
@@ -69,7 +69,7 @@ async def setwebhook():
 
 @app.on_event("startup")
 async def startup_event():
-    init_db()
+    await init_db()
     await setwebhook()
 
 
