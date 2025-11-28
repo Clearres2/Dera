@@ -8,7 +8,7 @@ TOKEN = os.getenv('TOKEN')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
 
 if not TOKEN:
-    raise ValueError("Bot token is not set in environment variables!")
+    raise ValueError("Bot token is not set in environment variables")
 
 app = FastAPI()
 
