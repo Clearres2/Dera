@@ -3,9 +3,24 @@ import httpx
 from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import JSONResponse
 from openai import AsyncOpenAI
+import sqlite3
+from pathlib import Path
 
 TOKEN = os.getenv('TOKEN')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
+DB_PATH = Path("UsersForState.db")
+
+def init_db():
+    if not DB_PATH.exists():
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                user_id INTEGER PRIMARY KEY            )
+        """)
+        conn.commit()
+        conn.close()
 
 if not TOKEN:
     raise ValueError("Bot token is not set in environment variables")
@@ -54,6 +69,7 @@ async def setwebhook():
 
 @app.on_event("startup")
 async def startup_event():
+    await init_db()
     await setwebhook()
 
 
