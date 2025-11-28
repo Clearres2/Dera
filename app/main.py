@@ -8,7 +8,7 @@ import os
 
 TOKEN = os.getenv('TOKEN')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
-DB_PATH = "/UsersForState.db"
+DB_PATH = "/tmp/bot_stats.db"
 
 def init_db():
     if not os.path.exists(DB_PATH):
@@ -69,7 +69,7 @@ async def setwebhook():
 
 @app.on_event("startup")
 async def startup_event():
-    await init_db()
+    init_db()
     await setwebhook()
 
 
