@@ -3,13 +3,17 @@ import httpx
 from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import JSONResponse
 from openai import AsyncOpenAI
-import sqlite3
 import os
+from supabase import create_client
 
 TOKEN = os.getenv('TOKEN')
 VERCEL_URL = os.getenv('VERCEL_URL')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+
 active_users = set()
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 
@@ -46,6 +50,16 @@ def parse_message(message):
     chat_id = message["message"]["chat"]["id"]
     txt = message["message"]["text"]
     return chat_id, txt
+
+
+def add_user_to_state(chat_id : int):
+    responce = supabase.table("users").select("user_id").eq("user_id", chat_id).execute()
+    if not responce:
+      supabase.table("users").insert({"user_id": chat_id}).execute()
+
+def total_users(chat_id : int):
+    responce = supabase.table("users").select("user_id", count="exact").execute()
+    return responce.count or 0
 
 @app.post('/setwebhook')
 async def setwebhook():
@@ -154,6 +168,8 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
 
     elif txt.lower() == "/start":
         active_users.add(chat_id)
+        add_user_to_state(chat_id)
+        
         await tel_send_message(chat_id, 
             "🎵 Добро пожаловать в наш уникальный музыкальный мир! "
             "Здесь вас ждут любимые треки и вдохновляющие клипы. 🎶\n\n"
@@ -164,9 +180,11 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         
     elif txt.lower() == "/admin":
         active_users.add(chat_id)
+        total = total_users()
         await tel_send_message_not_button(chat_id, 
             "🎵 Добро пожаловать в статистику!\n\n"
-            f"Активных пользователей: {len(active_users)}"
+            f"Активных пользователей: {len(active_users)}\n"
+            f"👥 Всего пользователей: {total}"
         )
 
 
