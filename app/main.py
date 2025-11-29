@@ -153,6 +153,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         background_tasks.add_task(process_user_request, chat_id, txt)
 
     elif txt.lower() == "/start":
+        active_users.add(chat_id)
         await tel_send_message(chat_id, 
             "🎵 Добро пожаловать в наш уникальный музыкальный мир! "
             "Здесь вас ждут любимые треки и вдохновляющие клипы. 🎶\n\n"
@@ -162,6 +163,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         )
         
     elif txt.lower() == "/admin":
+        active_users.add(chat_id)
         await tel_send_message_not_button(chat_id, 
             f"🎵 Добро пожаловать в статистику {len(active_users)}"
         )
