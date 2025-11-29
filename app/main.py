@@ -165,7 +165,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
     elif txt.lower() == "/admin":
         active_users.add(chat_id)
         await tel_send_message_not_button(chat_id, 
-            "🎵 Добро пожаловать в статистику!"
+            "🎵 Добро пожаловать в статистику!\n\n"
             f"Активных пользователей: {len(active_users)}"
         )
 
