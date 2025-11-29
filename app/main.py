@@ -163,7 +163,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         
     elif txt.lower() == "/admin":
         await tel_send_message_not_button(chat_id, 
-            f"🎵 Добро пожаловать в статистику {active_users}"
+            f"🎵 Добро пожаловать в статистику {len(active_users)}"
         )
 
 
