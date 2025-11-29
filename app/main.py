@@ -9,6 +9,7 @@ import os
 TOKEN = os.getenv('TOKEN')
 VERCEL_URL = os.getenv('VERCEL_URL')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
+active_users = set()
 
 
 
@@ -128,10 +129,13 @@ async def process_user_request(chat_id, txt):
 async def webhook(request: Request, background_tasks: BackgroundTasks):
     msg = await request.json()
     print("Получен вебхук:", msg)
+    
 
     if "callback_query" in msg:
         callback = msg["callback_query"]
         chat_id = callback["message"]["chat"]["id"]
+        if chat_id is not None:
+            active_users.add(chat_id)
         callback_data = callback["data"]
 
         if callback_data == "deepSeek":
@@ -159,7 +163,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         
     elif txt.lower() == "/admin":
         await tel_send_message_not_button(chat_id, 
-            "🎵 Добро пожаловать в статистику"
+            f"🎵 Добро пожаловать в статистику {active_users}"
         )
 
 
