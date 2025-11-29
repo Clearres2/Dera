@@ -54,7 +54,7 @@ def parse_message(message):
 
 def add_user_to_state(chat_id : int):
     responce = supabase.table("users").select("user_id").eq("user_id", chat_id).execute()
-    if not responce:
+    if not responce.:
       supabase.table("users").insert({"user_id": chat_id}).execute()
 
 def total_users(chat_id : int):
