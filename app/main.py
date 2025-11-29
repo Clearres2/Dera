@@ -52,10 +52,13 @@ def parse_message(message):
     return chat_id, txt
 
 
-def add_user_to_state(chat_id : int):
-    responce = supabase.table("users").select("user_id").eq("user_id", chat_id).execute()
-    if not responce.:
-      supabase.table("users").insert({"user_id": chat_id}).execute()
+def add_user_to_state(chat_id: int):
+    try:
+        res = supabase.table("users").select("user_id").eq("user_id", chat_id).execute()
+        if not res.data: 
+            supabase.table("users").insert({"user_id": chat_id}).execute()
+    except Exception as e:
+        print("Supabase error:", e)
 
 def get_total_users():
     try:
