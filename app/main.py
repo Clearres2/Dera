@@ -57,9 +57,12 @@ def add_user_to_state(chat_id : int):
     if not responce.:
       supabase.table("users").insert({"user_id": chat_id}).execute()
 
-def total_users(chat_id : int):
-    responce = supabase.table("users").select("user_id", count="exact").execute()
-    return responce.count or 0
+def get_total_users():
+    try:
+        res = supabase.table("users").select("*", count="exact").execute()
+        return res.count or 0
+    except:
+        return 0
 
 @app.post('/setwebhook')
 async def setwebhook():
@@ -180,7 +183,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         
     elif txt.lower() == "/admin":
         active_users.add(chat_id)
-        total = total_users()
+        total = get_total_users()
         await tel_send_message_not_button(chat_id, 
             "🎵 Добро пожаловать в статистику!\n\n"
             f"Активных пользователей: {len(active_users)}\n"
