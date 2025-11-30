@@ -188,6 +188,17 @@ async def process_user_request(chat_id, txt):
 async def webhook(request: Request, background_tasks: BackgroundTasks):
     msg = await request.json()
     print("Получен вебхук:", msg)
+
+    if "my_chat_member" in msg:
+        chat = msg["my_chat_member"]["chat"]
+        user_id = chat["id"]
+        new_status = msg["my_chat_member"]["new_chat_member"]["status"]
+        is_active = new_status not in ("left", "kicked")
+
+        if is_active:
+            true_user_to_active(user_id)
+        else:
+            false_user_to_active(user_id)
     
 
     if "callback_query" in msg:
