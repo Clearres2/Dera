@@ -236,7 +236,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
 
     elif txt.lower() == "/send_to_true_sub":
        listUsersId = get_total_users_id()
-       broadcast_to_users(listUsersId)
+       await broadcast_to_users(listUsersId)
 
 
 
