@@ -35,7 +35,7 @@ def split_text(text, max_length=MAX_MESSAGE_LENGTH):
 def send_all_users_message(chat_id):
     usersID = []
     all_users_id = supabase.table("users").select("user_id").execute()
-    for row in all_users_id.data():
+    for row in all_users_id.data:
         usersID += str(row)
     return "Все айди пользователей" + "\n".join(usersID)
 
