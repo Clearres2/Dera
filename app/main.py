@@ -36,7 +36,7 @@ def send_all_users_message(chat_id):
     usersID = []
     all_users_id = supabase.table("users").select("user_id").execute()
     for row in all_users_id.data:
-        usersID += str(row)
+        usersID.append(str(row["user_id"]))
     return "Все айди пользователей" + "\n".join(usersID)
 
 
