@@ -58,7 +58,23 @@ def add_user_to_state(chat_id: int):
         if not res.data: 
             supabase.table("users").insert({"user_id": chat_id}).execute()
     except Exception as e:
-        print("Supabase error:", e)
+        print("Supabase error")
+
+
+def false_user_to_active(chat_id: int):
+    try:
+        supabase.table("users").update({"active_users": False}).eq("user_id", chat_id).execute()
+    except Exception as e:
+        print("Supabase error")
+
+
+def get_true_users():
+    try:
+        res = supabase.table("users").select("*", count="exact").eq("active_users", True).execute()
+        return res.count or 0
+    except:
+        return 0
+
 
 def get_total_users():
     try:
@@ -190,6 +206,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         await tel_send_message_not_button(chat_id, 
             "🎵 Добро пожаловать в статистику!\n\n"
             f"Активных пользователей: {len(active_users)}\n"
+            f"Подписаных пользователей: {get_true_users()}\n"
             f"👥 Всего пользователей: {total}"
         )
 
