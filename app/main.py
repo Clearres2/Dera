@@ -32,7 +32,7 @@ MAX_MESSAGE_LENGTH = 4096
 def split_text(text, max_length=MAX_MESSAGE_LENGTH):
     return [text[i:i + max_length] for i in range(0, len(text), max_length)]
 
-def send_all_users_message(chat_id):
+def get_total_users_id():
     usersID = []
     all_users_id = supabase.table("users").select("user_id").execute()
     for row in all_users_id.data:
@@ -229,9 +229,8 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
     elif txt.lower() == "/false_to_sub":
         false_user_to_active(chat_id)
 
-    elif txt.lower() == "/all_users_id":
-       result = send_all_users_message(chat_id)
-       await tel_send_message_not_button(chat_id, result)
+    elif txt.lower() == "/send_to_true_sub":
+       listUsersId = get_total_users_id()
 
 
 
