@@ -210,6 +210,9 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
             f"👥 Всего пользователей: {total}"
         )
 
+    elif txt.lower() == "/false_to_sub":
+        false_user_to_active(chat_id)
+
 
 
 
