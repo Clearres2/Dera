@@ -261,10 +261,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
             f"👥 Всего пользователей: {total}"
         )
 
-    elif txt.lower() == "/false_to_sub":
-        false_user_to_active(chat_id)
-
-    elif txt.lower() == "/send_to_true_sub":
+    elif txt.lower() == "/send_to_sub":
        listUsersId = get_total_users_id()
        await broadcast_to_users(listUsersId)
 
