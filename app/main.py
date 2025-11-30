@@ -150,6 +150,9 @@ async def tel_send_message_not_button(chat_id, text):
     async with httpx.AsyncClient() as client:
         response = await client.post(url, json=payload)
 
+    if response.status_code == 403:
+        false_user_to_active(chat_id)
+
     if response.status_code != 200:
         print("Ошибка отправки сообщения:", response.text)
 
