@@ -39,6 +39,11 @@ def get_total_users_id():
         usersID.append(str(row["user_id"]))
     return usersID
 
+async def broadcast_to_users(listToCheckId):
+    for row in listToCheckId:
+        await tel_send_message_not_button(int(row), "Послушай новые песни!(Тест)")
+
+
 
 
 async def generate_response(text: str):
@@ -231,6 +236,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
 
     elif txt.lower() == "/send_to_true_sub":
        listUsersId = get_total_users_id()
+       broadcast_to_users(listUsersId)
 
 
 
