@@ -67,6 +67,12 @@ def false_user_to_active(chat_id: int):
     except Exception as e:
         print("Supabase error")
 
+def true_user_to_active(chat_id: int):
+    try:
+        supabase.table("users").update({"active_users": True}).eq("user_id", chat_id).execute()
+    except Exception as e:
+        print("Supabase error")
+
 
 def get_true_users():
     try:
@@ -189,6 +195,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         background_tasks.add_task(process_user_request, chat_id, txt)
 
     elif txt.lower() == "/start":
+        true_user_to_active(chat_id)
         active_users.add(chat_id)
         add_user_to_state(chat_id)
         
