@@ -32,6 +32,12 @@ MAX_MESSAGE_LENGTH = 4096
 def split_text(text, max_length=MAX_MESSAGE_LENGTH):
     return [text[i:i + max_length] for i in range(0, len(text), max_length)]
 
+async def send_all_users_message(chat_id):
+    all_users_id = supabase.table("users").select("*", count="exact").execute()
+    return all_users_id
+
+
+
 async def generate_response(text: str):
     try:
         completion = await client.chat.completions.create(
@@ -219,6 +225,10 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
 
     elif txt.lower() == "/false_to_sub":
         false_user_to_active(chat_id)
+
+    elif txt.lower() == "/all_users_id":
+       result = send_all_users_message(chat_id)
+       await tel_send_message_not_button(chat_id, result)
 
 
 
