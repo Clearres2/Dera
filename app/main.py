@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from openai import AsyncOpenAI
 import os
 from supabase import create_client
+from datetime import datetime, timezone, timedelta
 
 TOKEN = os.getenv('TOKEN')
 VERCEL_URL = os.getenv('VERCEL_URL')
@@ -200,6 +201,20 @@ async def process_user_request(chat_id, txt):
         await tel_send_message_not_markup(chat_id, part)
     user_states[chat_id] = None 
 
+def count_users_to_time():
+    timeToAnd = datetime.now(timezone.utc) - timedelta(seconds=45)
+    res = supabase.table("users").select("user_id", count="exact").gte("last_active_webapp", timeToAnd).execute()
+    return res.count or 0
+@app.post('/ping_users')
+async def requestActiveUsers(request: Request):
+    data = await request.json()
+    user_id = data.get("user_id")
+
+    if (user_id):
+        supabase.table("users").upsert({"user_id": int(user_id), "last_active_webapp": datetime.now(timezone.utc).isoformat()}).execute()
+    return {"ok": True}
+
+
 @app.post('/webhook')
 async def webhook(request: Request, background_tasks: BackgroundTasks):
     msg = await request.json()
@@ -256,7 +271,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         total = get_total_users()
         await tel_send_message_not_button(chat_id, 
             "🎵 Добро пожаловать в статистику!\n\n"
-            f"Активных пользователей: {len(active_users)}\n"
+            f"Активных пользователей: {count_users_to_time()}\n"
             f"Подписаных пользователей: {get_true_users()}\n"
             f"👥 Всего пользователей: {total}"
         )
