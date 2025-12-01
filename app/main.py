@@ -6,6 +6,9 @@ from openai import AsyncOpenAI
 import os
 from supabase import create_client
 from datetime import datetime, timezone, timedelta
+from fastapi.middleware.cors import CORSMiddleware
+
+
 
 TOKEN = os.getenv('TOKEN')
 VERCEL_URL = os.getenv('VERCEL_URL')
@@ -22,6 +25,14 @@ if not TOKEN:
     raise ValueError("Bot token is not set in environment variables")
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 client = AsyncOpenAI(
     base_url="https://openrouter.ai/api/v1",
