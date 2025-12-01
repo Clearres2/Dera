@@ -205,14 +205,21 @@ def count_users_to_time():
     timeToAnd = datetime.now(timezone.utc) - timedelta(seconds=45)
     res = supabase.table("users").select("user_id", count="exact").gte("last_active_webapp", timeToAnd).execute()
     return res.count or 0
+    
 @app.post('/ping_users')
 async def requestActiveUsers(request: Request):
     data = await request.json()
     user_id = data.get("user_id")
+    print("Начало")
 
-    if (user_id):
-        supabase.table("users").upsert({"user_id": int(user_id), "last_active_webapp": datetime.now(timezone.utc).isoformat()}).execute()
-    return {"ok": True}
+    try:
+        if (user_id):
+            supabase.table("users").upsert({"user_id": int(user_id), "last_active_webapp": datetime.now(timezone.utc).isoformat()}).execute()
+        return {"ok": True}
+    except Exception as e:
+        print(f"❌ ОШИБКА в /ping_users: {e}")
+        return {"ok": False}
+    
 
 
 @app.post('/webhook')
