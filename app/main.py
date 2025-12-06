@@ -272,7 +272,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
     if chat_id in user_states and user_states[chat_id] == "awaiting_response":
         background_tasks.add_task(process_user_request, chat_id, txt)
     
-    elif user_states[chat_id] == "send_all_users":
+    elif chat_id in user_states and user_states[chat_id] == "send_all_users":
         listUsersId = get_total_users_id()
         await broadcast_to_users(listUsersId, txt)
         
