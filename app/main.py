@@ -19,7 +19,7 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 active_users = set()
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-CHAT_ADMIN = 5108832503
+CHAT_ADMIN = 8019965642
 
 
 if not TOKEN:
