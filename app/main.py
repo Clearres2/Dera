@@ -19,6 +19,7 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 active_users = set()
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+CHAT_ADMIN = "5108832503"
 
 
 if not TOKEN:
@@ -51,9 +52,9 @@ def get_total_users_id():
         usersID.append(str(row["user_id"]))
     return usersID
 
-async def broadcast_to_users(listToCheckId):
+async def broadcast_to_users(listToCheckId, txt):
     for row in listToCheckId:
-        await tel_send_message_not_button(int(row), "Послушай новые песни!(Тест)")
+        await tel_send_message_not_button(int(row), txt)
 
 
 
@@ -270,6 +271,11 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
 
     if chat_id in user_states and user_states[chat_id] == "awaiting_response":
         background_tasks.add_task(process_user_request, chat_id, txt)
+    
+    elif user_states[chat_id] == "send_all_users":
+        listUsersId = get_total_users_id()
+        await broadcast_to_users(listUsersId, txt)
+        
 
     elif txt.lower() == "/start":
         true_user_to_active(chat_id)
@@ -295,8 +301,11 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         )
 
     elif txt.lower() == "/send_to_sub":
-       listUsersId = get_total_users_id()
-       await broadcast_to_users(listUsersId)
+       if chat_id == CHAT_ADMIN:   
+          user_states[chat_id] = "send_all_users"
+          await tel_send_message_not_markup(chat_id, "📩 Пришлите текст рассылки для всех пользователей:")
+       else:
+           await tel_send_message_not_button(chat_id, "Это только администраторам!")
 
 
 
