@@ -292,14 +292,17 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         )
         
     elif txt.lower() == "/admin":
-        active_users.add(chat_id)
-        total = get_total_users()
-        await tel_send_message_not_button(chat_id, 
-            "🎵 Добро пожаловать в статистику!\n\n"
-            f"Активных пользователей: {count_users_to_time()}\n"
-            f"Подписаных пользователей: {get_true_users()}\n"
-            f"👥 Всего пользователей: {total}"
-        )
+        if chat_id == CHAT_ADMIN or chat_id == 5108832503: 
+          active_users.add(chat_id)
+          total = get_total_users()
+          await tel_send_message_not_button(chat_id, 
+              "🎵 Добро пожаловать в статистику!\n\n"
+              f"Активных пользователей: {count_users_to_time()}\n"
+              f"Подписаных пользователей: {get_true_users()}\n"
+              f"👥 Всего пользователей: {total}"
+          )
+        else:
+           await tel_send_message_not_button(chat_id, "Это только администраторам!")
 
     elif txt.lower() == "/send_to_sub":
        if chat_id == CHAT_ADMIN:   
