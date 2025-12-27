@@ -17,7 +17,7 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
 active_users = set()
-supabate = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 CHAT_ADMIN = 8019965642
 
