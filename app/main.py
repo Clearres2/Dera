@@ -13,11 +13,11 @@ from fastapi.middleware.cors import CORSMiddleware
 TOKEN = os.getenv('TOKEN')
 VERCEL_URL = os.getenv('VERCEL_URL')
 TOKEN_DEEP_SEEK = os.getenv('TOKEN_DEEP_SEEK')
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
 active_users = set()
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabate = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 CHAT_ADMIN = 8019965642
 
