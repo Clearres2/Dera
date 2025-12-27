@@ -139,7 +139,7 @@ async def setwebhook():
 #        response = await client.get(webhook_url)
         
 #    if response.status_code == 200:
-        return JSONResponse(content={"status": "Webhook successfully set"}, status_code=200)
+        #return JSONResponse(content={"status": "Webhook successfully set"}, status_code=200)
 #   else:
 #     return JSONResponse(content={"error": f"Error setting webhook: {response.text}"}, status_code=response.status_code)
 
