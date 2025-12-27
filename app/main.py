@@ -67,7 +67,6 @@ async def generate_response(text: str):
         )
         return completion.choices[0].message.content
     except Exception as e:
-        print("Ошибка при генерации ответа:", e)
         return "Произошла ошибка при обработке вашего запроса."
 
 def parse_message(message):
@@ -165,7 +164,7 @@ async def tel_send_message(chat_id, text):
         response = await client.post(url, json=payload)
 
     if response.status_code != 200:
-        print("Ошибка отправки сообщения:", response.text)
+        print("Ошибка отправки сообщения:")
 
     return response
 
@@ -183,7 +182,7 @@ async def tel_send_message_not_button(chat_id, text):
         false_user_to_active(chat_id)
 
     if response.status_code != 200:
-        print("Ошибка отправки сообщения:", response.text)
+        print("Ошибка отправки сообщения:")
 
     return response
 
@@ -200,7 +199,7 @@ async def tel_send_message_not_markup(chat_id, text):
         response = await client.post(url, json=payload)
 
     if response.status_code != 200:
-        print("Ошибка отправки сообщения:", response.text)
+        print("Ошибка отправки сообщения:")
 
     return response
 
@@ -222,14 +221,12 @@ def count_users_to_time():
 async def requestActiveUsers(request: Request):
     data = await request.json()
     user_id = data.get("user_id")
-    print("Начало")
 
     try:
         if (user_id):
             supabase.table("users").upsert({"user_id": int(user_id), "last_active_webapp": datetime.now(timezone.utc).isoformat()}).execute()
         return {"ok": True}
     except Exception as e:
-        print(f"❌ ОШИБКА в /ping_users: {e}")
         return {"ok": False}
     
 
@@ -237,7 +234,6 @@ async def requestActiveUsers(request: Request):
 @app.post('/webhook')
 async def webhook(request: Request, background_tasks: BackgroundTasks):
     msg = await request.json()
-    print("Получен вебхук:", msg)
 
     if "my_chat_member" in msg:
         chat = msg["my_chat_member"]["chat"]
