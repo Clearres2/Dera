@@ -288,7 +288,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         )
         
     elif txt.lower() == "/admin":
-        if chat_id == CHAT_ADMIN or chat_id == 5108832503: 
+        if chat_id == CHAT_ADMIN or chat_id == 5108832503 or chat_id == 6674097758: 
           active_users.add(chat_id)
           total = get_total_users()
           await tel_send_message_not_button(chat_id, 
